@@ -1,0 +1,656 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+body, html {
+    height: 100%;
+    margin: 0;
+    /* font-family: Arial, sans-serif; */
+    font-family: "Open Sans", Arial, Sans-Serif;
+    /* font-family: 'Raleway', sans-serif; */
+    scroll-behavior: smooth;
+}
+p {
+    /* font-size: 20px; */
+    color : rgb(85,85,85);
+}
+h1{
+    font-weight: bolder;
+}
+a {
+    transition: all 300ms ease;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    text-decoration-color: white;
+}
+a:hover {
+    /* color: grey; */
+    /* background-color: #0B304D;
+    text-decoration: underline; */
+    text-underline-offset: 1rem;
+    text-decoration-color: rgb(181,181,181);
+}
+header{
+    height: 30px;
+}
+
+header,footer {
+    background-color: #0D192E;
+    /* background-color: #062034; */
+    /* font-family: 'Raleway', sans-serif; */
+    font-family: "Open Sans", Arial, Sans-Serif;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+.logo{
+    display: flex;
+    /* position: relative; */
+    align-items: center;
+    justify-content: space-around;
+    font-size: 15px;
+    gap: 20px;
+    /* font-family: 'Raleway', sans-serif; */
+    font-family: "Open Sans", Arial, Sans-Serif;
+    font-style: bold;
+    margin-right: 90px;
+    margin-left: 150px;
+}
+.socials, .socials p{
+    margin: 15px;
+    display: flex;
+    justify-content: wrap;
+    align-items: center;
+    color: white;
+    font-size: 13px;
+    font-weight: bolder;
+}
+
+.queries{
+    /* font-style: bold; */
+    display: flex;
+    margin-left: 40%;
+}
+.socials img{
+    height: 15px;
+    padding: 5px;
+    color: white;
+}
+.pfp{
+    height: 30px;
+}
+.logo2{
+    display: flex;
+    align-items: center;
+}
+footer{
+    /* display: flex;
+    align-items: center; */
+    font-size: 10px;
+    /* font-family: 'Raleway', sans-serif; */
+    font-family: "Open Sans", Arial, Sans-Serif;
+    font-style: bold;
+}
+footer .govtg{
+    height: 49px;
+    width: 35px;
+    /* border-radius: 10px; */
+    margin: 20px;
+}
+.govtg{
+    height: 98px;
+    width: 100px;
+    border-radius: 10px;
+    /* margin: 20px; */
+    /* background-color: #1b1b32; */
+}
+ul{
+    display: inline-flex;
+    list-style: none;
+}
+li{
+    padding: 15px;
+}
+li:hover{
+    background-color: #0a2132;
+    border-radius: 10px;
+}
+nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    /* font-family: 'Raleway', sans-serif; */
+    /* background-color: #fdfdfd; */
+    background-color: #0B304D;
+    color: white;
+    padding: 10px;
+    text-align: center;
+    height: 55px;
+    /* gap: 2rem; */
+    /* font-size: 1.5rem; */
+    font-size: 1rem;
+}
+h2{
+    text-align: center;
+    padding-bottom: 20px;
+}
+
+.btn,#class-select{
+    font-weight: 6  00;
+    transition: all 300ms ease;
+    padding: 0.5rem;
+    width: 6rem;
+    border-radius: 2rem;
+    border: rgb(52,52,52) 0.1rem solid;
+}
+
+.btn:hover{
+    cursor: pointer;
+}
+
+.container {
+    background-color: white;
+    /* background-color: azure; */
+    display: none;
+    padding: 20px;
+    height: 100%;
+    /* height: 50%; */
+    box-sizing: border-box;
+    /* overflow: auto; */
+}
+#instruction{
+    height: auto;
+}
+.sub-container{
+    /* top right down left */
+    /* background-color: #dcdce4; */
+    background-color: #0b304d0f;
+    margin: 0 200px 200px 200px;
+    border: 0px solid #221a1a;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    /* border: 0.5px solid #221a1a; */
+    border-radius: 20px;
+    padding: 20px;
+    height: auto;
+    box-sizing: border-box;
+    /* overflow: auto; */
+}
+.district_table_container{
+    background-color: #0b304d0f;
+    margin: 0 200px 200px 155px;
+    border: 0px solid #221a1a;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+.active-container {
+    display: block;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 16px;
+}
+label #student-caste{
+    padding: 10px;
+}
+section{
+    padding: 10px;
+}
+/* ---------------------------- */
+/* Input Styles */
+input {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Add padding to the paragraphs */
+.form-container p {
+    padding: 5px 0;
+    /* font-size: 20px; */
+}
+
+/* Add some margin to the form for better spacing */
+.form-container form {
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+/* --------------------------------- */
+form {
+    background-color: #F0F3F4;
+    /* background-color: azure; */
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin: 0 200px 200px 200px;
+    border: 0px solid #221a1a;
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+}
+td{
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-left: 15px;
+    text-align: center;
+    /* font-size: 20px; */
+}
+td .pfp{
+    margin-left: 40px;
+}
+.t_title,label{
+    font-weight: bold;
+ }
+.class-filter{
+    display: flex;
+    gap: 5px;
+    align-items: right;
+ }
+ .inl{
+    width: unset;
+    margin: 10px 5px 20px 0px;
+  }
+#workpending{
+    height: 60%;
+    display: block;
+}
+input{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+select{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+label {
+    display: block;
+    font-weight: 600;
+    margin-top: 10px;
+}
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+input[type="submit"] {
+    background-color: #0d192edb;
+    color: white;
+    font-size: 16px;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+/* Center the form horizontally */
+#dataForm {
+    max-width: 400px;
+    margin: 0 auto;
+}
+#addDataButton{
+    background-color: #0d192edb;
+    color: white;
+    font-size: 14px;
+    padding: 8px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+ul.nav .super_a:hover{
+    background-color: #0a2132;
+    border-radius: 10px;
+}
+ul.sub-nav a:hover{
+    background-color: #0a2132;
+
+}
+li:hover{
+    background-color: #0a2132;
+    border-radius: 10px;
+}
+
+ul.nav li a {
+    text-decoration: none;
+    color: white;
+}
+.sub-nav{
+    right:auto;
+    opacity: 0;
+    display: block;
+    position: absolute;
+    top: 35px;
+    margin-top: 75px;
+    background-color: #0B304D;
+    visibility: hidden;
+    z-index: 1;
+    overflow: visible;
+}
+
+li:hover ul.sub-nav{
+    opacity: 1;
+    top: 40px;
+    visibility: visible;
+}
+ul.sub-nav li{
+    float: none;
+    width: auto;
+   
+}
+ul.sub-nav li:hover{
+    background-color: #0a2132;
+}
+
+.dr_title{
+    text-align: center;
+    font-family: Arial, Sans-serif;
+}
+
+.total_students{
+    width: auto;
+    height: auto;
+    position: absolute;
+    font-size: 24px;
+    font-family: Arial, Sans-serif;
+    font-weight: bold;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    top: 20%;
+    right: 8%;
+}
+.total_dropout_students{
+    width: auto;
+    height: auto;
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Arial, Sans-Serif;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    top: 35%;
+    right: 8%;
+}
+.dropout_ratio{
+    width: auto;
+    height: auto;
+    position: absolute;
+    font-size: 24px;
+    font-weight: bold;
+    font-family: Arial, Sans-Serif;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    top: 50%;
+    right: 8%;
+}
+
+
+/* Age Wise analysis */
+.drop_out_age_wise_container{
+    background-color: #0b304d0f;
+     border-radius: 10px;
+     box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+     margin:auto;
+     border: 0px solid #221a1a;
+     /* border: 0.5px solid #221a1a; */
+     padding: 20px;
+     height: 90%;
+     width: 80%;
+     box-sizing: border-box;
+     position:relative;
+ }
+ .dr_bar_chart_age{
+    width: 60%;
+    height: 55%;
+    position: absolute;
+    top: 55%;
+    left: 10%;
+    transform: translateY(-50%);
+}
+
+/* Gender Wise analysis */
+.drop_out_gender_wise_container{
+    background-color: #0b304d0f;
+    border-radius: 10px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin:auto;
+    border: 0px solid #221a1a;
+    /* border: 0.5px solid #221a1a; */
+    padding: 20px;
+    height: 90%;
+    width: 80%;
+    box-sizing: border-box;
+    position:relative;
+}
+.dr_bar_chart_gender{
+
+    width: 65%;
+    height: 65%;
+    position: absolute;
+    top: 55%;
+    left: 5%;
+    transform: translateY(-50%);
+
+}
+
+/* Income Wise dropout */
+.drop_out_income_wise_container{
+    background-color: #0b304d0f;
+    border-radius: 10px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin:auto;
+    border: 0px solid #221a1a;
+    /* border: 0.5px solid #221a1a; */
+    padding: 20px;
+    height: 90%;
+    width: 80%;
+    box-sizing: border-box;
+    position:relative;
+}
+
+.dr_bar_chart_income{
+
+    width: 50%;
+    height: 60%;
+    position: absolute;
+    top: 55%;
+    left: 5%;
+    transform: translateY(-50%);
+
+}
+
+/* School Wise dropout */
+.drop_out_school_wise_container{
+    background-color: #0b304d0f;
+    border-radius: 10px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin:auto;
+    border: 0px solid #221a1a;
+    /* border: 0.5px solid #221a1a; */
+    padding: 20px;
+    height: 90%;
+    width: 80%;
+    box-sizing: border-box;
+    position:relative;
+}
+
+.dr_bar_chart_School{
+
+    width: 50%;
+    height: 60%;
+    position: absolute;
+    top: 55%;
+    left: 5%;
+    transform: translateY(-50%);
+
+}
+
+.sub-container{
+    /* top right down left dcdce4 */
+
+    background-color: #0b304d0f;
+    border-radius: 10px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin: 0 200px 200px 200px;
+    border: 0px solid #221a1a;
+    /* border: 0.5px solid #221a1a; */
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+.view-container{
+    /* top right down left dcdce4 */
+
+    background-color: #0b304d0f;
+    border-radius: 10px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin: 0 200px 200px 200px;
+    border: 0px solid #221a1a;
+    /* border: 0.5px solid #221a1a; */
+    padding: 20px;
+    height: 100%;
+    box-sizing: border-box;
+}
+
+
+
+table{
+    border-collapse: collapse;
+    width: 100%;
+    margin: 10px 0;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: #f2f2f2;
+}
+.ins_table{
+    font-size: 18px;
+}
+.ins_table th{
+    font-size: 18px;
+}
+label {
+    display: block;
+    font-weight: 600;
+    margin-top: 10px;
+}
+input[type="text"],
+input[type="number"],
+input[type="email"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+}
+input[type="submit"] {
+    background-color: #0d192edb;
+    color: white;
+    font-size: 16px;
+    padding: 15px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+/* Center the form horizontally */
+#dataForm {
+    max-width: 400px;
+    margin: 0 auto;
+}
+.instruction_inbox{
+    /* width: auto;
+    height: auto; */
+    /* position: absolute; */
+    margin-left: 425px;
+    margin-right: 425px;
+    margin-bottom: 30px;
+    font-weight: bold;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    /* padding: 20px; */
+    top: 32%;
+    left: 38%;
+}
+
+.instruction_cointainer{
+    background-color: #0b304d0f;
+    border-radius: 10px;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    margin:auto;
+    border: 0px solid #221a1a;
+    /* border: 0.5px solid #221a1a; */
+    padding: 20px;
+    height: 90%;
+    width: 80%;
+    box-sizing: border-box;
+    position:relative;
+}
+.inst_text{
+    font-size: small;
+}
+table .ins_table{
+    font-size: small;
+}
+#addDataButton{
+    background-color: #0d192edb;
+    color: white;
+    font-size: 14px;
+    padding: 8px;
+    margin-top: 10px;
+    border: none;
+    cursor: pointer;
+}
+
+
+.district_table_container1{
+    background-color: #0b304d0f;
+    margin: 0 200px 200px 200px;
+    border: 0px solid #221a1a;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    padding: 20px;
+    box-sizing: border-box;
+    overflow: auto;
+    
+}
+
+.abvhy{
+    color: #4e4c4c;
+}
+
+
+.g_dropout_ratio1{
+    width: auto;
+    height: auto;
+    position: absolute;
+    font-size: 26px;
+    font-weight: bold;
+    border-radius: 10px;
+    box-sizing: border-box;
+    box-shadow:  0 0 10px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    top: 50%;
+    right: 8%;
+}

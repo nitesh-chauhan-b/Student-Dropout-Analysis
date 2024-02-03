@@ -1,0 +1,707 @@
+{% load custom_filters %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government of India</title>
+    <link rel="stylesheet" href="/static/gov_style.css">
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+</style>
+
+<body>
+    <!-- <header>
+        <img class='govtg' src="/assets/gov_img.png" alt="Government of India Logo">
+        <h1>Government Of India</h1>
+    </header> -->
+    <header></header>
+    <nav>
+        <div class="logo">
+            <img class='govtg' src="/static/assets1/govtg1.png" alt="Government of Gujarat Logo">
+            <h1>Government Of India</h1>
+        </div>
+        <ul class="nav">
+            <!-- <li> <a class="super_a" href="#" onclick="showContent('home')">Home</a> </li> -->
+            <li> <a class="super_a" href="#" onclick="showContent('info'); hideanything(false);">Home</a> </li>
+            <li> <a class="super_a" href="#" onclick="showContent('dropout-rate'); hideanything(false);">Dropout Rate</a> </li>
+            <li> <a href="#">Dropout Analysis</a>
+                <ul class="sub-nav">
+                    <li><a href="#" onClick="showContent('dropout_analysis_Age_Wise'); hideanything(false);">Age Wise</a> </li>
+                    <li> <a href="#" onClick="showContent('dropout_analysis_Gender_Wise'); hideanything(false);">Gender Wise</a></li>
+                    <li><a href="#" onClick="showContent('dropout_analysis_Cast_Wise'); hideanything(false);">Caste Wise</a></li>
+                    <li> <a href="#" onClick="showContent('dropout_analysis_Income_Wise'); hideanything(false);">Income Wise</a> </li>
+                    <li> <a href="#" onClick="showContent('dropout_analysis_Category_Wise'); hideanything(false);">Category Wise</a> </li>
+                    <li> <a href="#" onClick="showContent('dropout_analysis_School_Wise'); hideanything(false);">School Wise</a> </li>
+                    <li><a href="#" onClick="showContent('dropout_analysis_Area_Wise'); hideanything(false);">District Wise</a></li>
+                    <li> <a href="#" onClick="showContent('dropout_analysis_Reason_Wise'); hideanything(false);">Reason Wise</a> </li>
+                   
+                   
+                </ul>
+            </li>
+            <li> <a class="super_a"  href="#" onclick="showContent('Report_state'); hideanything(true);">Report</a> </li>
+            <li> <a href="#">Suggestion</a>
+                <ul class="sub-nav" hideanything(false);>
+                    <li><a href="#"  onclick="showContent('instructions_to_distict'); hideanything(false);">Instructions To District</a></li>
+                    <li><a href="#" onClick="showContent('instructions_to_school'); hideanything(false);">Instructions To School</a></li>
+                    <li> <a href="#" onClick="showContent('suggestion'); hideanything(false);">District Details</a></li>
+                </ul>
+            </li>
+            <li> <a class="super_a" href="#" onclick="showContent('aproved'); hideanything(false);">Approved</a> </li>
+            <li> <a class="super_a" href="/logoutgov">Log Out</a></li>
+        </ul>
+
+
+    </nav>
+
+
+
+    <div class="container" id="info">
+        <div class="sub-container" id="gov_info">
+            <h2 class="state_title">State Education Profile</h2>
+            <table id="info_table">
+                <tr>
+                    <td class="t_title"> State Name </td>
+                    <td>{{user.username}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title"> State Email </td>
+                    <td>{{user.email}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title"> State Id </td>
+                    <td>{{user.state_id}}</td>
+                </tr>
+               
+                <form method="get" action="{% url 'gov_index_filtered' %}">
+                    {% csrf_token %}
+                    <label for="year">Filter by Year:</label>
+                    <input type="text" id="year" name="year" value="{{ selected_year }}" placeholder="Enter year">
+                    <button type="submit">Filter</button>
+                </form>
+               
+            </table>
+        </div>
+        <!-- Add more fields here -->
+    </div>
+
+    <div class="container" id="Report_state">
+        <div>
+            <h2>Report</h2>
+        </div>
+        <div class="info_table">
+        <table>
+            <tr>
+                <td>State Name </td>
+                <td>{{user.state}}</td>
+            </tr>
+            <tr>
+                <td>Year</td>
+                <td>{{year}}</td>
+            </tr>
+            <tr>
+                <td>Total Student</td>
+                <td>{{ total_students_count_year }}</td>
+            </tr>
+            <tr>
+                <td>Total Dropout Student</td>
+                <td>{{ ttotal_dropout_students }}</td>
+            </tr>
+            <tr>
+                <td>State Dropout Ratio</td>
+                <td> {{ percentage_dropout }} %</td>
+            </tr>
+            <tr>
+                <td>State Male Dropout</td>
+                <td>{{  male_dropout_students }}</td>
+            </tr>
+            <tr>
+                <td>State Female Dropout</td>
+                <td>{{  female_dropout_students }}</td>
+            </tr>
+            <tr>
+                <td>Private School Dropout Ratio</td>
+                <td>{{ total_dropout_private_ratio }}%</td>
+            </tr>
+            <tr>
+                <td>Government School Dropout Ratio</td>
+                <td>{{ total_dropout_goverm_ratio }}%</td>
+            </tr>
+           
+        </table>
+        </div>
+
+
+
+
+        <p class="top3">Top 3 School Dropout</p>
+        <div class="ins_table">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>School Name</th>
+                        <th>Ratio</th>     
+                    </tr>
+                </thead>
+                {% for school in top_schools %}
+                <tbody>             
+                    <tr>
+                            <td>{{school.school_index }}</td>
+                            <td>{{school.dropout_ratio}}</td>       
+                    </tr>   
+                {% endfor %}   
+                </tbody>
+            </table>
+            
+        </div>
+
+        <p class="top3">Top 3 District Dropout</p>
+        <div class="ins_table">
+            
+            <table>
+                <thead>
+                    <tr>
+                        <th>District Name</th>
+                        <th>Ratio</th>     
+                    </tr>
+                </thead>
+                
+                <tbody>  
+                    {% for district in top_districts %}           
+                    <tr>
+                        <td>{{ district.city }}</td>
+                        <td>{{ district.dropout_ratio_city }}</td>      
+                    </tr>  
+                    {% endfor %} 
+               
+                </tbody>
+            </table>
+            
+        </div>
+
+  
+    </div>
+
+    <div class="container" id="aproved">
+        <div class="district_table_container">
+            <table>
+                <h2>Unapproved Table</h2>
+                <thead>
+                    <tr>
+                        <th>username</th>
+                        <th>email</th>
+                        <th>state</th>
+                        <th>District</th>
+                        <th>Approval</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for district in pending_district %}
+                        <tr>
+
+                            <td>{{ district.username }}</td>
+                            <td>{{ district.email }}</td>
+                            <td>{{ district.state }}</td>
+                            <td>{{ district.District }}</td>
+                            <td><a href="{% url 'approve_district' district.id %}">Approve</a></td>
+                            
+                        </tr>
+                            <!-- Add link/button for rejection if needed -->
+                        
+                    {% endfor %}
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="district_table_container">
+            <table>
+                <h2>Approved Table</h2>
+                <thead>
+                    <tr>
+                        <th>username</th>
+                        <th>email</th>
+                        <th>state</th>
+                        <th>District</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    {% for districtApproved in approved_district %}
+                        <tr>
+
+                            <td>{{ districtApproved.username }}</td>
+                            <td>{{ districtApproved.email }}</td>
+                            <td>{{ districtApproved.state }}</td>
+                            <td>{{ districtApproved.District }}</td>
+                           
+                            
+                        </tr>
+                            <!-- Add link/button for rejection if needed -->
+                        
+                    {% endfor %}
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div class="container" id="dropout-rate">
+
+        <div class="Dropout-rate-container">
+            <h1 class="dr_title">{{user.state}} School Dropout Statistics</h1>
+            <div class="g_total_students">
+                <p>Total School Students : <span id="demo4000">{{ total_students_count_year }}</span> </p>
+            </div>
+            <div class="g_total_dropout_students">
+               <p> Total Dropout Students: <span id="demo">{{ ttotal_dropout_students }}</span> </p>
+            </div>
+            <div class="g_dropout_ratio">
+                <p>Dropout Ratio: {{ percentage_dropout }} %</p>
+            </div>
+            <div class="dr_pie_chart">
+                <canvas id="dropoutChart" style="position: relative; height:40vh; width:80vw"></canvas>
+            </div>
+            <!-- Include Chart.js library -->
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        </div>
+    </div>
+
+
+
+    <div class="container" id="dropout_analysis_Age_Wise">
+
+        <div class="drop_out_age_wise_container">
+            <h1 class="dr_title">Age Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students:  {{ total_students_count_year }}</p>
+            </div>
+            <div class="g_total_dropout_students">
+                <p> Total Dropout Students: {{ ttotal_dropout_students }} </p>
+             </div>
+
+            <div class="g_dropout_ratio">
+               
+                <p>Dropout Students 0-5: <span id="demo5">{{  age_group_0_5 }}</span></p>
+                <p>Dropout Students 6-10: <span id="demo10">{{ age_group_6_10 }}</span></p>
+                <p>Dropout Students 11-15: <span id="demo15">{{ age_group_11_15 }}</span></p>
+                <p>Dropout Students 16-20: <span id="demo20">{{ age_group_16_20 }}</span></p>
+            </div>           
+            
+            <div class="dr_bar_chart_age">
+                <canvas id="dropoutChart_Age_wise" style="position: relative; height:20vh; width:15vw"></canvas>
+            </div>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+    <div class="container" id="dropout_analysis_Gender_Wise">
+
+        <div class="drop_out_gender_wise_container">
+            <h1 class="dr_title">Gender Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="g_total_dropout_students">
+                <p>Total Dropout Students : <span id="demo102">{{total_dropout_fm_student}}</span></p>
+             </div>
+
+
+            <div class="g_dropout_ratio">
+                <p>Dropout male Students: <span id="demo100">{{  male_dropout_students }}</span></p>
+                <p>Dropout Female Students:  <span id="demo101">{{  female_dropout_students }}</span></p>
+            </div>
+
+            <div class="dr_bar_chart_gender">
+                <canvas id="dropoutChart_Gender_wise"></canvas>
+            </div>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+
+
+    {% comment %} School Category {% endcomment %}
+    <div class="container" id="dropout_analysis_Category_Wise">
+
+        <div class="drop_out_gender_wise_container">
+            <h1 class="dr_title">Category Wise Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="g_total_dropout_students">
+                <p>Total Dropout Students : {{ttotal_dropout_students}}</p>
+             </div>
+             <div class="g_dropout_ratio">
+                <p>Private: <span id="demo781">{{totaldropout_Private}}</span></p>
+                <p>Government: <span id="demo791">{{totaldropout_Government}}</span></p>
+                <p>Semi-Government:  <span id="demo801">{{totaldropout_SemiGovernment}}</span></p>  
+            </div>
+
+            <div class="dr_bar_chart_gender">
+                <canvas id="dropoutChart_Category_wise"></canvas>
+            </div>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+
+
+
+    <div class="container" id="dropout_analysis_Cast_Wise">
+
+        <div class="drop_out_gender_wise_container">
+            <h1 class="dr_title">Cast Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="g_total_dropout_students">
+                <p> Total Dropout Students: {{ ttotal_dropout_students }} </p>
+             </div>
+            <div class="g_dropout_ratio">
+                <p>Dropout Students(open): <span id="demo200">{{totaldropout_OPEN}}</span> </p>
+                <p>Dropout Students(ST): <span id="demo201">{{totaldropout_ST}}</span> </p>
+                <p>Dropout Students(SC): <span id="demo202">{{totaldropout_SC}}</span> </p>
+                <p>Dropout Students(OBC): <span id="demo203">{{totaldropout_OBC}}</span> </p>
+            </div>
+           
+            <div class="dr_bar_chart_cast">
+                <canvas id="dropoutChart_Cast_wise"></canvas>
+            </div>
+
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+    <div class="container" id="dropout_analysis_Area_Wise">
+
+        <table id="info_table_city">
+            <tr>
+                <td class="t_title"> City Name </td>
+                <td class="t_title">Total Dropout students</td>
+                <td class="t_title">Total Male dropout </td>
+                <td class="t_title">Total Female dropout </td>
+                <td class="t_title">Total Students</td>
+                <td class="t_title">Dropout Ratio</td>
+            </tr>
+            {% for data in combined_data_city %}
+                <tr>
+                    <td>{{ data.city }}</td>
+                    <td>{{ data.total_dropout_students }}</td>
+                    <td>{{ data.male_dropout_students_city }}</td>
+                    <td>{{ data.female_dropout_students_city }}</td>
+                    <td>{{ data.total_students }}</td>
+                    <td>{{ data.dropout_ratio_city }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+     
+    </div>
+
+
+    <div class="container" id="dropout_analysis_School_Wise">
+
+      
+        <table id="info_table">
+            <tr>
+                <td class="t_title"> School Name </td>
+                <td class="t_title">Total dropout studnet</td>
+                <td class="t_title">Total Male dropout </td>
+                <td class="t_title">Total Female dropout </td>
+                <td class="t_title">Total Students</td>
+                <td class="t_title">Dropout Ratio</td>
+            </tr>
+            
+            {% for data in combined_data %}
+            <tr>
+                <td>{{ data.school_index }}</td>
+                <td>{{ data.total_dropout_students }}</td>
+                <td>{{ data.male_dropout_students_school_wise }}</td>
+                <td>{{ data.female_dropout_students_school_wise }}</td>
+                <td>{{ data.total_students }}</td>
+                <td>{{ data.dropout_ratio }}</td>
+            </tr>
+            {% endfor %}
+           
+        </table>
+        
+    </div>
+
+    <div class="container" id="dropout_analysis_Reason_Wise">
+
+      
+        <table>
+            <tr>
+                <td class="t_title">Reason</td>
+                <td class="t_title">Total dropout studnet</td>
+               
+            </tr>
+            
+            {% for reason in reason_indices %}
+            <tr>
+                <td>{{reason}}</td>
+                <td>{{dropout_reason_counts|dict_lookup:reason}}</td>
+                
+            </tr>
+            {% endfor %}
+           
+        </table>
+        
+    </div>
+
+
+    <div class="container" id="dropout_analysis_Income_Wise">
+
+        <div class="drop_out_income_wise_container">
+            <h1 class="dr_title">Income Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="g_total_dropout_students">
+                <p> Total Dropout Students: {{ ttotal_dropout_students }} </p>
+            </div>
+            <div class="g_dropout_ratio">
+                <p>Income (0-10000):<span id="demo110">{{total_dropout_range_0}}</span></p>
+                <p>Income (10001-50000):<span id="demo111">{{total_dropout_range_1}}</span> </p>
+                <p>Income (50001-100000):<span id="demo112">{{total_dropout_range_2}}</span> </p>
+                <p>Income (100000>):<span id="demo113">{{total_dropout_range_3}}</span> </p>
+            </div>
+           
+            <div class="dr_bar_chart_income">
+                <canvas id="dropoutChart_Income_wise"></canvas>
+            </div>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+
+    <div class="container" id="instructions_to_distict">
+
+        <div class="instruction_cointainer">
+            <h2>Instructions To District</h2>
+             <!-- Table to display the entered data -->
+
+             <!-- <table id="dataTable" class="ins_table">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Instructor Name</th>
+                        <th>District name</th>
+                        <th>Instruction</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>   -->
+
+            <!-- Button to add another data row and toggle the form visibility -->
+             <!-- <button id="addDataButton">Add Another Data</button>  -->
+
+            <div class="instruction_inbox" >
+                <!-- Form for user input -->
+                <!-- <form id="dataForm" method="post" action="{% url 'suggestion' %}"> -->
+                <form id="dataForm" method="post" action="{% url 'suggestion' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <label for="name">Instructor Name:</label>
+                    <input type="text" id="name" name="instructor_name" required>
+
+                    <label for="age">District name:</label>
+                    <input type="text" id="age" name="district_name" required>
+
+                    <label for="email">Instruction:</label>
+                    <input type="text" id="email" name="instruction" required>
+
+
+                    <input type="submit" value="Submit" name="submit">
+                </form>
+            </div>
+
+                <table class="ins_table">
+                    <thead>
+                        <tr>
+                           <th>Instruction Name</th>
+                            <th>State name</th>
+                            <th>District name</th>
+                            <th>Suggestion</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for suggestion in suggestion_from_state_to_district %}
+                    <tr>     
+                        <td>{{ suggestion.instructor_name }}</td>          
+                        <td>{{ suggestion.state_name }}</td>
+                        <td>{{ suggestion.district_name }}</td>
+                        <td>{{ suggestion.instruction }}</td>
+                        <td><a href="{% url 'delete_suggesstion_from_government_to_district' pk=suggestion.pk %}" class="black-text">Delete</a></td>
+
+                      
+                    </tr>
+                    {% endfor %}
+                        
+                    </tbody>
+                </table>
+               
+           
+        </div>
+        <!-- Add more fields here -->
+    </div>
+
+    <div class="container" id="instructions_to_school">
+
+        <div class="instruction_cointainer">
+            <h2>Instructions To School</h2>
+
+             <!-- Table to display the entered data -->
+
+             <!-- <table id="dataTable" class="ins_table">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Instructor Name</th>
+                        <th>District name</th>
+                        <th>Instruction</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>   -->
+
+            <!-- Button to add another data row and toggle the form visibility -->
+             <!-- <button id="addDataButton">Add Another Data</button>  -->
+
+            <div class="instruction_inbox" >
+                <!-- Form for user input -->
+                <!-- <form id="dataForm" method="post" action="{% url 'suggestion' %}"> -->
+                <form id="dataForm" method="post" action="{% url 'Suggestion_G_to_S' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <label for="name">Instructor Name:</label>
+                    <input type="text" id="name" name="instructor_name" required>
+
+                    <label for="age">School name:</label>
+                    <input type="text" id="age" name="school_name" required>
+
+                    <label for="email">Instruction:</label>
+                    <input type="text" id="email" name="instruction" required>
+
+
+                    <input type="submit" value="Submit" name="submit">
+                </form>
+            </div>
+
+
+            <table class="ins_table">
+                <thead>
+                    <tr>
+                       <th>Instruction Name</th>
+                        <th>State name</th>
+                        <th>School name</th>
+                        <th>Suggestion</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tbody>
+                    {% for suggestion in suggestion_from_state_to_school %}
+                    <tr>     
+                        <td>{{ suggestion.instructor_name }}</td>          
+                        <td>{{ suggestion.state_name }}</td>
+                        <td>{{ suggestion.school_name }}</td>
+                        <td>{{ suggestion.instruction }}</td>
+                        <td><a href="{% url 'delete_suggesstion_from_state_to_school' pk=suggestion.pk %}" class="black-text">Delete</a></td>
+
+                      
+                    </tr>
+                    {% endfor %}
+                    
+                    
+                </tbody>
+            </table>
+
+        </div>
+        <!-- Add more fields here -->
+    </div>
+
+    <div class="container" id="suggestion">
+        <div class="sub-container">
+            <table>
+                <h2>Suggestion From Higher Authority</h2>
+                <thead>
+                    <tr>
+                       <th>Instruction Name</th>
+                        <th>District name</th>
+                        <th>School name</th>
+                        <th>Suggestion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for suggestion in suggestions %}
+                    <tr>     
+                        <td>{{ suggestion.instructor_name }}</td>          
+                        <td>{{ suggestion.district_name }}</td>
+                        <td>{{ suggestion.school_name }}</td>
+                        <td>{{ suggestion.instruction }}</td>
+                      
+                    </tr>
+                    {% endfor %}
+                    <!-- Add more rows for additional students -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+    <footer id="hidethis">
+        <div class="logo2">
+            <img class='govtg' src="/static/assets1/govtg1.png" alt="Government of Gujarat Logo">
+            <h1>Government Of India</h1>
+        </div>
+        <hr>
+        <div class="socials">
+            <p>Follow Us</p>
+            <img src="/static/assets/icons8-instagram-150.png" alt="insta">
+            <img src="/static/assets/icons8-twitter-150.png" alt="x">
+            <img src="/static/assets/icons8-facebook-150.png" alt="meta">
+            <img src="/static/assets/icons8-youtube-256.png" alt="yt">
+            <img src="/static/assets/icons8-email-100.png" alt="email">
+            <img src="/static/assets/icons8-discord-100.png" alt="ds">
+            <div class="queries">
+                <p>Privacy policy</p>
+                <p>Accessibility Statement</p>
+                <p>Copyright Information</p>
+                <p>FQIA</p>
+                <p>No FEAR act</p>
+            </div>
+        </div>
+        <div class="copyright">
+                <!-- <img src="assets/copyright.png" alt="copyright"> -->
+                <p>TEAM: Edu-Empowerers :-)</p>
+        </div>
+    </footer>
+    <script src="/static/script1.js"></script>
+</body>
+
+</html>

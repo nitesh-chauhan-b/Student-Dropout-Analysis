@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Of India</title>
+    <link rel="stylesheet" href="/static/school_index_style.css">
+</head>
+<!-- <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,100&display=swap');
+  </style> -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+  </style>
+<body>
+    <header></header>
+    <nav>
+        <div class="logo">
+        <img class = 'govtg' src="/static/assets/govtg1.png" alt="Government of Gujarat Logo">
+        <h1>Government Of India</h1>
+        </div>
+        <ul>
+            <!-- data-page="info" -->
+        <li><a href="#" onclick="showContent('info')">Home </a></li>
+        <li><a href="#" onclick="showContent('dropout-form')">Dropout Form</a></li>
+        <li><a href="#" onclick="showContent('dropout-view')">Edit Details</a></li>
+        <li><a href="#" onclick="showContent('total_students')">Total Student</a></li>
+        <li><a href="#" onclick="showContent('prediction')">Prediction</a></li>
+        <li> <a href="#">Suggestion</a>
+            <ul class="sub-nav">
+                <li><a href="#" onclick="showContent('suggestion')">Suggestion by District</a></li>
+                <li><a href="#" onclick="showContent('suggestiongtos')">Suggestion by State</a></li>
+            </ul>
+        </li>  
+        <!-- <li><a href="/view-contact-enquiries" >Edit Details of Student</a></li> -->
+        <!-- <li><a href="#" onclick="showContent('suggestion')">Suggestion</a></li> -->
+        <li><a href="/logout">Log Out</a>
+        </ul>
+    </nav>
+
+
+
+    <div class="container" id="prediction">
+        <div class="sub-container" id="gov_info">
+            <div style="margin-top: 7%;" id="instructions_to_distict">
+
+                <div class="instruction_cointainer">
+                    <h2 style="margin-top: 20px;">Prediction Of Dropout</h2>
+
+                    <div class="instruction_inbox" >
+                        <!-- Form for user input -->
+                        <!-- <form id="dataForm" method="post" action="{% url 'suggestion' %}"> -->
+                            <form id="dataForm" method="post"  action="{% url 'predict_dropout' %}">
+                                {% csrf_token %}
+                                {{ form.as_p }}
+            
+                                <label for="name">Age:</label>
+                                <input type="text" id="age" name="age" required>
+            
+                                <label>Student Gender:</label>
+
+                                Male
+                                <input type="radio" id="male" name="gender" class="inl" value="0" required/>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                Female
+                                <input type="radio" id="female" name="gender" class="inl" value="1" required/>
+
+                                
+                                <label for="age">Cast:</label>
+                                <input type="text" id="caste" name="caste" required>
+            
+                                <label for="email" name="income">Income:</label>
+                                <input type="text" id="email" name="income" required>
+                                <label for="email">Distance From School:</label>
+                                <input type="text" id="email" name="distance" required>
+                                <label for="email" name="fee">School fee:</label>
+                                <input type="text" id="email" name="fee" required>
+                                
+            
+                                <input type="submit" value="Submit" name="submit">
+                                
+                                <!-- <p>Based on the input data, the KNN model predicts: Not Dropout</p> -->
+                                <div class="pre_result1"> Result:  {{ dropout_status }} </div>
+                            </form>              
+                            
+                           
+                        
+                        
+                        </div>
+                            <form method="post" enctype="multipart/form-data" action="{% url 'predict_batch_dropout' %}">
+                                {% csrf_token %}
+                                {{ excel_form.as_p }}
+                                <input type="file" name="excel_file">
+                                <br>
+                                <button type="submit">Predict Dropout for All Students</button>
+                            </form>
+                </div>
+                <!-- Add more fields here -->
+                <h3>Data with Predictions:</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Age</th>
+                            <th>Gender</th>
+                            <th>Caste</th>
+                            <th>Distance</th>
+                            <th>Income</th>
+                            <th>Fees</th>
+                            <th>Dropout Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for index, row in data_with_predictions.iterrows %}
+                            <tr>
+                                <td>{{ row.student_id }}</td>
+                                <td>{{ row.age }}</td>
+                                <td>{{ row.gender }}</td>
+                                <td>{{ row.caste }}</td>
+                                <td>{{ row.distance }}</td>
+                                <td>{{ row.income }}</td>
+                                <td>{{ row.fee }}</td>
+                                <td>{{ row.dropout_status }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+        
+
+            </div>
+       </div>
+    </div>  
+  
+
+    <!-- <div class="container" id="workpending"></div> -->
+    <div class="container" id="info">
+        <div class="sub-container" id="gov_info">
+            <h2 class="state_title">School Profile</h2>
+            <table>
+                <tr>
+                    <td class="t_title">School Name</td>
+                    <td> {{user.username}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title">School Email</td>
+                    <td>{{user.email}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title">School District</td>
+                    <td> {{user.District}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title">School State</td>
+                    <td>{{user.state}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title">School Category:</td>
+                    <td>{{user.s_category}}</td>
+                </tr>
+                
+                <!-- Add more fields here -->
+            </table>
+
+        </div>
+     
+    </div>   
+    
+    <div class="container" id="dropout-form">
+        <div class="form-container">
+
+
+            <form action="{% url 'saveenquiry' %}" method="post">
+                
+                <h2>Dropout Form</h2>
+                {% csrf_token %}
+                <label for="student-name">Student Name:</label>
+                <input type="text" id="student-name" name="name"  required placeholder="Enter student's name">
+    
+                <label for="student-age">Student Age:</label>
+                <input type="number" id="student-age" name="age"  required placeholder="Enter student's age">
+    
+                <label>Student Gender:</label>
+
+                Male
+                <input type="radio" id="male" name="gender" class="inl" value="male" required/>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                Female
+                <input type="radio" id="female" name="gender" class="inl" value="female" required/>
+
+                <label for="student-caste">Student Caste:</label>
+                <!-- <input type="text" id="student-caste" name="student-caste" required placeholder="Enter student's caste"> -->
+                <select id="student-caste" name="caste" required>
+                    <option value="" disabled selected>Select Caste</option>
+                    <option value="open">Open</option>
+                    <option value="obc">OBC/SEBC</option>
+                    <option value="sc">Scheduled Caste</option>
+                    <option value="st">Scheduled Tribe</option>
+                    <!-- Add more options as needed -->
+                </select>
+
+                <label for="s_category">School Category</label>
+                <select id="s_category" name="s_category" required>
+                    <option value="" disabled selected>Select School Category</option>
+                    <option value="Private">Private</option>
+                    <option value="Government">Government</option>
+                    <option value="SemiGovernment">SemiGovernment</option>
+                </select>
+
+                <label for="Distance">Distance Form School:</label>
+                <input type="number" id="Distance" name="Distance"  required placeholder="Enter Distance Form School">
+    
+                <label for="student-area">Student Area:</label>
+                <input type="text" id="student-area" name="area" required placeholder="Enter student's area">
+    
+                <label for="student-city">Student City:</label>
+                <input type="text" id="student-city" name="city" required placeholder="Enter student's city">
+    
+                <label for="household-income">Household Income:</label>
+                <input type="number" id="household-income" name="income" required placeholder="Enter household income">
+    
+                <label for="leave-reason">Reason for Leaving:</label>
+                <select id="leave-reason" name="reason" required>
+                    <option value="" disabled selected>Select a reason</option>
+                    <option value="financial">Financial reasons</option>
+                    <option value="personal">Personal reasons</option>
+                    <option value="health">Health issues</option>
+                    <option value="depresion">Depression</option>
+                    <option value="familyrelocation">Family Relocation</option>
+                    <option value="Foreign Study">Foreign Study</option>
+                    <option value="Language Barriers">Language Barriers</option>
+                    <option value="other">other</option>
+
+
+                    <!-- Add more options as needed -->
+                </select>
+    
+                <label for="father-occupation">Father's Occupation:</label>
+                <input type="text" id="father-occupation" name="foccupation" required placeholder="Enter father's occupation">
+    
+                <label for="schoolindex">School Name</label>
+                <input type="text" id="schoolindex" name="schoolindex" required placeholder="Enter School Index">
+    
+                <label for="mystate">State</label>
+                {% comment %} <input type="text" id="mystate" name="mystate" required placeholder="Enter Your State"> {% endcomment %}
+                <select id="mystate" name="mystate" required>
+                    <option value="" disabled selected>Select State</option>
+      
+                    <option value="Andhra Pradesh">Andhra Pradesh</option>
+                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
+                    <option value="Assam">Assam</option>
+                    <option value="Bihar">Bihar</option>
+                    <option value="Chhattisgarh">Chhattisgarh</option>
+                    <option value="Goa">Goa</option>
+                    <option value="Gujarat">Gujarat</option>
+                    <option value="Haryana">Haryana</option>
+                    <option value="Himachal Pradesh">Himachal Pradesh</option>
+                    <option value="Jharkhand">Jharkhand</option>
+                    <option value="Karnataka">Karnataka</option>
+                    <option value="Kerala">Kerala</option>
+                    <option value="Madhya Pradesh">Madhya Pradesh</option>
+                    <option value="Maharashtra">Maharashtra</option>
+                    <option value="Manipur">Manipur</option>
+                    <option value="Meghalaya">Meghalaya</option>
+                    <option value="Mizoram">Mizoram</option>
+                    <option value="Nagaland">Nagaland</option>
+                    <option value="Odisha">Odisha</option>
+                    <option value="Punjab">Punjab</option>
+                    <option value="Rajasthan">Rajasthan</option>
+                    <option value="Sikkim">Sikkim</option>
+                    <option value="Tamil Nadu">Tamil Nadu</option>
+                    <option value="Telangana">Telangana</option>
+                    <option value="Tripura">Tripura</option>
+                    <option value="Uttar Pradesh">Uttar Pradesh</option>
+                    <option value="Uttarakhand">Uttarakhand</option>
+                    <option value="West Bengal">West Bengal</option>
+                    <option value="Delhi">Delhi</option>             
+                </select>
+
+
+
+                <label for="studentid">Student ID</label>
+                <input type="text" id="studentid" name="studentid" required placeholder="Enter Student ID">
+
+                <label for="Year">Year</label>
+                <input type="number" id="Year" name="Year" required placeholder="Enter Year">
+    
+                <!-- Add more fields here -->
+                <input class="btn" type="submit" name="submit" value="Submit">
+            </form>
+        </div>
+    </div>
+
+   
+    <div class="container" id="dropout-view">
+       
+        <div class="class-filter">
+            <label for="class-select">Filter:</label>
+            <select id="class-select" onchange="filterByClass()">
+                <option value="all">All Classes</option>
+                <option value="name">Name</option>
+                <option value="age">age</option>
+                <option value="class">class</option>
+                <option value="gender">gender</option>
+                <option value="area">area</option>
+                <option value="city">city</option>
+                <option value="income">income</option>
+                <option value="reason">reason for leaving</option>
+
+
+                <!-- Add more options for other classes -->
+            </select>
+
+            <h1>
+
+                <!-- <a href="/school_index" class="refresh" >View data</a> -->
+            </h1>
+        </div>
+        <div class="sub-container1">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>Caste</th>
+                    <th>School Category</th>
+                    <th>Distance</th>
+                    <th>Area</th>
+                    <th>City</th>
+                    <th>Income</th>
+                    <th>Reason</th>
+                    <th>Father Occupation</th>
+                    <th>School Name</th>
+                    <th>State</th>
+                    <th>Student ID</th>
+                    <th>Year</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for enquiry in enquiries %}
+                    <tr>
+                      <td>{{ enquiry.name }}</td>
+                      <td>{{ enquiry.age }}</td>
+                      <td>{{ enquiry.gender }}</td>
+                      <td>{{ enquiry.caste }}</td>
+                      <td>{{ enquiry.s_category }}</td>
+                      <td>{{ enquiry.Distance }}</td>
+                      <td>{{ enquiry.area }}</td>
+                      <td>{{ enquiry.city }}</td>
+                      <td>{{ enquiry.income }}</td>
+                      <td>{{ enquiry.reason }}</td>
+                      <td>{{ enquiry.foccupation }}</td>
+                      <td>{{ enquiry.schoolindex }}</td>
+                      <td>{{ enquiry.mystate }}</td>
+                      <td>{{ enquiry.studentid }}</td>
+                      <td>{{ enquiry.Year }}</td>
+                      <td><a href="{% url 'delete_student_data' pk=enquiry.pk %}" class="black-text">Delete</a></td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+          
+      
+            
+        </div>
+     
+        <!-- Display submitted data from the database here -->
+    </div>
+    
+
+    {% comment %} <div class="container" id="report">
+        <h2>Report</h2>
+        <div class="sub-container">
+        <p>School Name: XYZ School</p>
+        <p>School Area: Chandkheda</p>
+        <p>Field 2: Value 2</p>
+        <p>Field 1: Value 1</p>
+        </div>
+        <!-- Add more fields here -->
+    </div> {% endcomment %}
+
+    <div class="container" id="suggestion">
+        <div class="sub-container">
+            <table>
+                <h2>Suggestion From District</h2>
+                <thead>
+                    <tr>
+                       <th>Instruction Name:</th>
+                        <th>District name</th>
+                        <th>Suggestion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                    {% for suggestion in suggestions %}
+                    <tr>     
+                        <td>{{ suggestion.instructor_name }}</td>          
+                        <td>{{ suggestion.district_name }}</td>
+                        <td>{{ suggestion.instruction }}</td>
+                      
+                    </tr>
+                    {% endfor %}
+                    
+                    <!-- Add more rows for additional students -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+    <div class="container" id="suggestiongtos">
+        <div class="sub-container">
+            <table>
+                <h2>Suggestion From State</h2>
+                <thead>
+                    <tr>
+                       <th>Instruction Name:</th>
+                        <th>State name</th>
+                        <th>Suggestion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                   
+                    {% for suggestion in suggestions_G_to_S %}
+                    <tr>     
+                        <td>{{ suggestion.instructor_name }}</td>          
+                        <td>{{ suggestion.state_name }}</td>
+                        <td>{{ suggestion.instruction }}</td>
+                      
+                    </tr>
+                    {% endfor %}
+                    
+                    <!-- Add more rows for additional students -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+    {% comment %} total number of student {% endcomment %}
+
+    <div class="container" id="total_students">
+        <div class="sub-container">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                  <tr>
+                    <th>Username</th>
+                    <th>District</th>
+                    <th>State</th>
+                    <th>Year</th>
+                    <th>Total Student</th>
+                  </tr>
+                </thead>
+                <tbody>
+                    {% for data in school_data %}
+                        <tr>
+                            <td>{{ data.school }}</td>
+                            <td>{{ data.district }}</td>
+                            <td>{{ data.state }}</td>
+                            <td>{{ data.year }}</td>
+                            <td>{{ data.total_students }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+              </table>       
+        </div>
+
+        <div class="form-container">
+            <form method="post" action="{% url 'SchoolYearDataStore' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <label for="year1">Year:</label>
+                <input type="number" id="year1" name="year1" required placeholder="Enter Year">
+    
+                <label for="totalstu">Total Student:</label>
+                <input type="number" id="totalstu" name="totalstu" required placeholder="Enter total student">
+
+                <button type="submit">Submit</button>
+            </form>
+
+        <div>
+    </div>
+    </div>
+    </div>
+
+   
+    <footer class="foot">
+            <div class="logo2">
+            <img class = 'govtg' src="/static/assets/govtg1.png" alt="Government of Gujarat Logo">
+            <h1>Government Of India</h1></div>
+            <hr>
+            <div class="socials">
+        <p>Follow Us</p>
+        <img src="/static/assets/icons8-twitter-150.png" alt="x">
+        <img src="/static/assets/icons8-instagram-150.png" alt="insta">
+        <img src="/static/assets/icons8-facebook-150.png" alt="meta">
+        <img src="/static/assets/icons8-youtube-256.png" alt="yt">
+        <img src="/static/assets/icons8-email-100.png" alt="email">
+        <img src="/static/assets/icons8-discord-100.png" alt="ds">
+        <div class="queries">
+        <p>Privacy policy</p>
+        <p>Accessibility Statement</p>
+        <p>Copyright Information</p>
+        <p>FQIA</p>
+        <p>No FEAR act</p></div></div>
+        <div class="copyright">
+            <!-- <img src="assets/copyright.png" alt="copyright"> -->
+            <p>TEAM: Edu-Empowerers :-)</p>
+        </div>
+    </footer>
+<script src="/static/script.js"></script>
+</body>
+</html>

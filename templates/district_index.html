@@ -1,0 +1,789 @@
+{% load custom_filters %}
+{% load humanize %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>District</title>
+    <link rel="stylesheet" href="/static/dis_style.css">
+</head>
+<!-- <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,100&display=swap');
+  </style> -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+  </style>
+<body>
+    <header></header>
+    <nav>
+        <div class="logo">
+        <img class = 'govtg' src="/static/assets/govtg1.png" alt="Government of Gujarat Logo">
+        <h1>Government Of India</h1>
+        </div>
+        <ul>
+
+        <li><a href="#" onclick="showContent('info')">Home </a></li>
+        <li><a href="#" onclick="showContent('district-table')">District Student Table</a></li>
+        <li> <a href="#">Dropout Analysis</a>
+            <ul class="sub-nav">
+                <li><a href="#" onClick="showContent('dropout_analysis_District_Wise')">District Dropout</a> </li>
+                <li><a href="#" onClick="showContent('dropout_analysis_Age_Wise')">Age Wise</a> </li>
+                <li> <a href="#" onClick="showContent('dropout_analysis_Gender_Wise')">Gender Wise</a></li>
+                <li> <a href="#" onClick="showContent('dropout_analysis_Income_Wise')">Income Wise</a> </li>
+                <li> <a href="#" onClick="showContent('dropout_analysis_School_Wise')">School Wise</a> </li>
+                <li> <a href="#" onClick="showContent('dropout_analysis_Distance_Wise')">Distance Wise</a> </li>
+            </ul>
+        </li>
+        <li><a href="#" onclick="showContent('suggestion')">Suggestion</a></li>
+        <li><a href="#" onclick="showContent('instruction')">Instructions</a></li>
+        <li><a href="#" onclick="showContent('aproved')">Approved</a></li>
+        <!-- <li><a href="#" onclick="showContent('suggestion')">Suggestion</a></li> -->
+        <li><a href="/logoutdis">Log Out</a>
+        </ul>
+    </nav>
+
+    <!-- <div class="container" id="workpending"></div> -->
+
+    <div class="container" id="info">
+        <div class="sub-container" id="gov_info">
+            <h2 class="state_title">District Info</h2>
+            <table>
+                <tr>
+                    <td class="t_title"> District Name </td>
+                    <td>{{user.username}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title"> District email </td>
+                    <td>{{user.email}}</td>
+                </tr>
+                <tr>
+                    <td class="t_title"> District State </td>
+                    <td>{{user.state}}</td>
+                </tr>
+                <form method="get" action="{% url 'district_index_filtered' %}">
+                    {% csrf_token %}
+                    <label for="year">Filter by Year:</label>
+                    <input type="text" id="year" name="year" value="{{ selected_year }}" placeholder="Enter year">
+                    <button type="submit">Filter</button>
+                </form>
+                
+                
+                
+
+            </table>
+        </div>
+    </div>
+
+
+    <div class="container" id="aproved">
+        <div class="district_table_container1">
+            <table>
+                <h2>Unapproved Table</h2>
+                <thead>
+                    <tr>
+                        <th>username</th>
+                        <th>email</th>
+                        <th>state</th>
+                        <th>District</th>
+                        <th>Approval</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for school in pending_schools %}
+                        <tr>
+
+                            <td>{{ school.username }}</td>
+                            <td>{{ school.email }}</td>
+                            <td>{{ school.state }}</td>
+                            <td>{{ school.District }}</td>
+                            <td><a href="{% url 'approve_school' school.id %}" class="abvhy">Approve</a></td>
+                            
+                        </tr>
+                            <!-- Add link/button for rejection if needed -->
+                        
+                    {% endfor %}
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+
+        <div class="district_table_container1">
+            <table>
+                <h2>Approved Table</h2>
+                <thead>
+                    <tr>
+                        <th>username</th>
+                        <th>email</th>
+                        <th>state</th>
+                        <th>District</th>
+                        
+                    </tr>
+                </thead>
+                <tbody>
+                   
+                    {% for schoolApproved in approved_school %}
+                        <tr>
+
+                            <td>{{ schoolApproved.username }}</td>
+                            <td>{{ schoolApproved.email }}</td>
+                            <td>{{ schoolApproved.state }}</td>
+                            <td>{{ schoolApproved.District }}</td>
+                           
+                            
+                        </tr>
+                            <!-- Add link/button for rejection if needed -->
+                        
+                    {% endfor %}
+                    
+                    
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="container" id="suggestion">
+        <div class="sub-container">
+            <table>
+                <h2>Suggestion From Higher Authority</h2>
+                <thead>
+                    <tr>
+                       <th>Instruction Name:</th>
+                        <th>District name</th>
+                        <th>Suggestion</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for suggestion in suggestions %}
+                    <tr>     
+                        <td>{{ suggestion.instructor_name }}</td>          
+                        <td>{{ suggestion.district_name }}</td>
+                        <td>{{ suggestion.instruction }}</td>
+                      
+                    </tr>
+                    {% endfor %}
+                    <!-- Add more rows for additional students -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+    
+    
+
+    <div class="container" id="district-table">
+       
+        <div class="class-filter">
+            <label for="class-select">Filter:</label>
+            <select id="class-select" onchange="filterByClass()">
+                <option value="all">All Classes</option>
+                <option value="name">Name</option>
+                <option value="age">age</option>
+                <option value="class">class</option>
+                <option value="gender">gender</option>
+                <option value="area">area</option>
+                <option value="city">city</option>
+                <option value="income">income</option>
+                <option value="reason">reason for leaving</option>
+
+
+                <!-- Add more options for other classes -->
+            </select>
+        </div>
+        <div class="district_table_container">
+            <table>
+                <h2>District Table</h2>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Gender</th>
+                        <th>Caste</th>
+                        <th>School Category</th>
+                        <th>Distance</th>
+                        <th>Area</th>
+                        <th>City</th>
+                        <th>Income</th>
+                        <th>Reason</th>
+                        <th>Father Occupation</th>
+                        <th>School Name</th>
+                        <th>State</th>
+                        <th>Student ID</th>
+                        <th>Year</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in student_data %}
+                    <tr> 
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.age }}</td>
+                        <td>{{ student.gender }}</td>
+                        <td>{{ student.caste }}</td>
+                        <td>{{ student.s_category }}</td>
+                        <td>{{ student.Distance }}</td>
+                        <td>{{ student.area }}</td>
+                        <td>{{ student.city }}</td>
+                        <td>{{ student.income }}</td>
+                        <td>{{ student.reason }}</td>
+                        <td>{{ student.foccupation }}</td>
+                        <td>{{ student.schoolindex }}</td>
+                        <td>{{ student.mystate }}</td>
+                        <td>{{ student.studentid }}</td>
+                        <td>{{ student.Year }}</td>
+  
+                    </tr>
+                    {% endfor %}
+                    
+                    <!-- Add more rows for additional students -->
+                </tbody>
+            </table>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+    
+    <div class="container" id="instruction">
+
+        <div class="instruction_cointainer">
+            <h2>Instructions To School</h2>
+             <!-- Table to display the entered data -->
+
+             <!-- <table id="dataTable" class="ins_table">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Instructor Name</th>
+                        <th>District name</th>
+                        <th>Instruction</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                  
+                </tbody>
+            </table>   -->
+
+            <!-- Button to add another data row and toggle the form visibility -->
+             <!-- <button id="addDataButton">Add Another Data</button>  -->
+
+            <div class="instruction_inbox" >
+                <!-- Form for user input -->
+                <!-- <form id="dataForm" method="post" action="{% url 'suggestion' %}"> -->
+                <form id="dataForm" method="post" action="{% url 'suggestionDist' %}">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+
+                    <label for="name">Instructor Name:</label>
+                    <input type="text" id="name" name="instructor_name" required>
+
+                    <label for="age">School name:</label>
+                    <input type="text" id="age" name="school_name" required>
+
+                    <label for="email">Instruction:</label>
+                    <input type="text" id="email" name="instruction" required>
+
+
+                    <input type="submit" value="Submit" name="submit">
+                </form>
+            </div>
+
+                <table class="ins_table">
+                    <thead>
+                        <tr>
+                           <th>Instruction Name</th>
+                            <th>District name</th>
+                            <th>School name</th>
+                            <th>Suggestion</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for suggestion in suggestion_from_district_to_school %}
+                        <tr>     
+                            <td>{{ suggestion.instructor_name }}</td>          
+                            <td>{{ suggestion.state_name }}</td>
+                            <td>{{ suggestion.district_name }}</td>
+                            <td>{{ suggestion.instruction }}</td>
+                            <td><a href="{% url 'delete_suggesstion_from_district_to_school' pk=suggestion.pk %}" class="black-text">Delete</a></td>
+                          
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            
+            
+        </div>
+        <!-- Add more fields here -->
+    </div>
+
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <div class="container" id="dropout_analysis_Age_Wise">
+
+        <div class="drop_out_age_wise_container">
+            <h1 class="dr_title">Age Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="total_dropout_students">
+                <p>Total Dropout Students: {{ ttotal_dropout_students }}</p>
+            </div>
+            <div class="g_dropout_ratio1">
+                <p>Dropout Students 0-5: <span id="demo5">{{  age_group_0_5 }}</span></p>
+                <p>Dropout Students 6-10: <span id="demo10">{{ age_group_6_10 }}</span></p>
+                <p>Dropout Students 11-15: <span id="demo15">{{ age_group_11_15 }}</span></p>
+                <p>Dropout Students 16-20: <span id="demo20">{{ age_group_16_20 }}</span></p>
+                
+            </div>
+          
+            <div class="dr_bar_chart_age">
+                <canvas id="dropoutChart_Age_wise" style="position: relative; height:20vh; width:15vw"></canvas>
+            </div>
+
+
+
+            <script>
+
+                    var data1Element5 = document.getElementById('demo5');
+                    var data5 = data1Element5.textContent;
+
+                    var data1Element10 = document.getElementById('demo10');
+                    var data10 = data1Element10.textContent;
+
+                    var data1Element15 = document.getElementById('demo15');
+                    var data15 = data1Element15.textContent;
+
+                    var data1Element20 = document.getElementById('demo20');
+                    var data20 = data1Element20.textContent;
+                // Data
+                const dropoutData = [
+                    { ageGroup: '0-5', dropoutCount: data5 },
+                    { ageGroup: '6-10', dropoutCount: data10 },
+                    { ageGroup: '11-15', dropoutCount: data15 },
+                    { ageGroup: '16-20', dropoutCount: data20 },
+                ];
+
+                // Extract labels and data values from the data
+                const labels = dropoutData.map(item => item.ageGroup);
+                const dataValues = dropoutData.map(item => item.dropoutCount);
+
+                // Create a chart
+                var ctx = document.getElementById('dropoutChart_Age_wise').getContext('2d');
+                var dropoutChart = new Chart(ctx, {
+                    type: 'bar', // Bar chart type
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Student Dropout Count',
+                            data: dataValues,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 3
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: {
+                                beginAtZero: true
+                            },
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+
+            </script>
+
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+    {% comment %} Distance Wise {% endcomment %}
+
+    <div class="container" id="dropout_analysis_Distance_Wise">
+
+        <div class="drop_out_age_wise_container">
+            <h1 class="dr_title">Distance Wise Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students:  {{ total_students_count_year }}</p>
+            </div>
+            <div class="total_dropout_students">
+                <p>Total Dropout Students: {{ ttotal_dropout_students }}</p>
+            </div>
+            <div class="g_dropout_ratio1">
+                <p>Dropout Students(0-5): <span id="demo50">{{total_dropout_dist_range_0}}</span></p> 
+                <p>Dropout Students(6-15): <span id="demo51">{{total_dropout_dist_range_1}}</span></p> 
+                <p>Dropout Students(16-30): <span id="demo52">{{total_dropout_dist_range_2}}</span></p> 
+                <p>Dropout Students(30>): <span id="demo53">{{total_dropout_dist_range_3}}</span></p> 
+            </div>
+            
+
+                    
+            <div class="dr_bar_chart_age">
+                <canvas id="dropoutChart_Distance_wise" style="position: relative; height:20vh; width:15vw"></canvas>
+            </div>
+
+            <script>
+                var data1Element50 = document.getElementById('demo50');
+                var demo50 = data1Element50.textContent;
+
+                var data1Element51 = document.getElementById('demo51');
+                var demo51 = data1Element51.textContent;
+
+                var data1Element52 = document.getElementById('demo52');
+                var demo52 = data1Element52.textContent;
+
+                var data1Element53 = document.getElementById('demo53');
+                var demo53 = data1Element53.textContent;
+            
+                const dropoutData1 = [
+                    { disGroup: '0-5', disdropoutCount: demo50 },
+                    { disGroup: '6-15', disdropoutCount: demo51 },
+                    { disGroup: '16-30', disdropoutCount: demo52 },
+                    { disGroup: '30 above', disdropoutCount: demo53 },
+                  
+                ];
+                const dislabels1 = dropoutData1.map(item => item.disGroup);
+                const disdataValues1 = dropoutData1.map(item => item.disdropoutCount);
+                
+
+            // Create a chart
+            var ctx = document.getElementById('dropoutChart_Distance_wise').getContext('2d');
+            var dropoutChart = new Chart(ctx, {
+                type: 'bar', // Bar chart type
+                data: {
+                    labels: dislabels1,
+                    datasets: [{
+                        label: 'Student Dropout Count',
+                        data: disdataValues1,
+                        backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        },
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+        </script>
+
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+
+
+    <div class="container" id="dropout_analysis_Gender_Wise">
+
+        <div class="drop_out_gender_wise_container">
+            <h1 class="dr_title">Gender Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="total_dropout_students">
+                <p>Total Dropout Students : <span id="demo102">{{total_dropout_fm_student}}</span></p>
+            </div>
+            <div class="g_dropout_ratio1">
+                <p>Dropout male Students: <span id="demo100">{{  male_dropout_students }}</span></p>
+                <p>Dropout Female Students:  <span id="demo101">{{  female_dropout_students }}</span></p>
+            </div>
+           
+            <div class="dr_bar_chart_gender">
+                <canvas id="dropoutChart_Gender_wise"></canvas>
+            </div>
+
+
+            <script>
+
+             var data1Element102 = document.getElementById('demo102');
+              var data102 = data1Element102.textContent;
+
+              var data1Element101 = document.getElementById('demo101');
+              var data101 = data1Element101.textContent;
+
+              var data1Element100 = document.getElementById('demo100');
+              var data100 = data1Element100.textContent;
+                // Data
+                const totalStudents = 1000;
+                const totalDropouts = data102;
+
+                const maleDropouts = data100;
+                const femaleDropouts = data101;
+
+                // Create a pie chart
+                var ctx = document.getElementById('dropoutChart_Gender_wise').getContext('2d');
+                var dropoutChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Male', 'Female'],
+                        datasets: [{
+                            data: [maleDropouts, femaleDropouts],
+                            backgroundColor: ['#0074A3', '#F3BA00'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    // This more specific font property overrides the global property
+                                    font: {
+                                        size: 18
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+
+
+
+
+
+    {% comment %} District Dropout {% endcomment %}
+
+    <div class="container" id="dropout_analysis_District_Wise">
+
+        <div class="drop_out_gender_wise_container">
+            <h1 class="dr_title">District Total Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: <span id="demo40001">{{ total_students_count_year }}</span></p>
+            </div>
+            <div class="total_dropout_students">
+                <p> Total Dropout Students: <span id="deno40002">{{ ttotal_dropout_students }}</span></p> 
+            </div>
+            <div class="g_dropout_ratio1">
+                <p>Dropout Ratio: {{ tdropout_ratio }}% </p>
+            </div>
+            
+           
+            <div class="dr_bar_chart_gender">
+                <canvas id="dropoutChart_District_wise"></canvas>
+            </div>
+
+
+            <script>
+
+             
+                var data1Element40001 = document.getElementById('demo40001');
+                var demo40001 = data1Element40001.textContent;
+  
+                var data1Element40002 = document.getElementById('deno40002');
+                var deno40002 = data1Element40002.textContent;
+
+                
+                // Create a pie chart
+                var ctx = document.getElementById('dropoutChart_District_wise').getContext('2d');
+                var dropoutChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: ['Total Student', 'Dropout Student'],
+                        datasets: [{
+                            data: [demo40001, deno40002],
+                            backgroundColor: ['#0074A3', '#F3BA00'],
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    // This more specific font property overrides the global property
+                                    font: {
+                                        size: 18
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            </script>
+
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    <div class="container" id="dropout_analysis_School_Wise">
+
+        <div class="drop_out_school_wise_container">
+            <h1 class="dr_title">School Wise Dropout Statistics</h1>
+            <table id="info_table">
+                <tr>
+                    <td class="t_title"> School Name </td>
+                    <td class="t_title">Total dropout studnet</td>
+                    <td class="t_title">Total Male dropout </td>
+                    <td class="t_title">Total Female dropout </td>
+                    <td class="t_title">Total Students</td>
+                    <td class="t_title">Dropout Ratio</td>
+
+                </tr>
+                
+                {% for data in combined_data %}
+                <tr>
+                    <td>{{ data.school_index }}</td>
+                    <td>{{ data.total_dropout_students }}</td>
+                    <td>{{ data.male_dropout_students_school_wise }}</td>
+                    <td>{{ data.female_dropout_students_school_wise }}</td>
+                    <td>{{ data.total_students }}</td>
+                    <td>{{ data.dropout_ratio }}</td>
+                </tr>
+                {% endfor %}
+               
+            </table>
+            
+
+
+           
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+    <div class="container" id="dropout_analysis_Income_Wise">
+
+        <div class="drop_out_income_wise_container">
+            <h1 class="dr_title">Income Wise School Dropout Statistics</h1>
+            <div class="total_students">
+                <p>Total School Students: {{ total_students_count_year }}</p>
+            </div>
+            <div class="total_dropout_students">
+                <p>Total Dropout Students: {{ ttotal_dropout_students }}</p>
+            </div>
+            <div class="g_dropout_ratio1">
+                <p>Income (0-10000):<span id="demo110">{{total_dropout_range_0}}</span></p>
+                <p>Income (10001-50000):<span id="demo111">{{total_dropout_range_1}}</span> </p>
+                <p>Income (50001-100000):<span id="demo112">{{total_dropout_range_2}}</span> </p>
+                <p>Income (100000>):<span id="demo113">{{total_dropout_range_3}}</span> </p>
+            </div>
+           
+            <div class="dr_bar_chart_income">
+                <canvas id="dropoutChart_Income_wise"></canvas>
+            </div>
+
+
+
+            <script>
+                var data1Element110 = document.getElementById('demo110');
+                var data110 = data1Element110.textContent;
+
+                var data1Element111 = document.getElementById('demo111');
+                var data111 = data1Element111.textContent;
+
+                var data1Element112 = document.getElementById('demo112');
+                var data112 = data1Element112.textContent;
+
+                var data1Element113 = document.getElementById('demo113');
+                var data113 = data1Element113.textContent;
+                // Sample data for student dropout rate by father's income (in lakhs per year)
+                const incomeCategories = ['0-10000', '10001-50000', '500001-100000','100000>'];
+                const dropoutRates_i = [data110, data111, data112,data113]; // Dropout rates for each income category
+
+                // Create a bar chart
+                var ctx = document.getElementById('dropoutChart_Income_wise').getContext('2d');
+                var dropoutChart = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: incomeCategories.map(category => `${category}`),
+                        datasets: [{
+                            label: 'Dropout',
+                            data: dropoutRates_i,
+                            backgroundColor: 'rgba(75, 192, 192, 0.6)',
+                            borderColor: 'rgba(75, 192, 192, 1)',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                title: {
+                                    display: true,
+                                    text: 'Dropout'
+                                }
+                            },
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: "Father's Income (per Month)"
+                                }
+                            }
+
+
+                        }
+                    }
+                });
+            </script>
+        </div>
+        <!-- Display submitted data from the database here -->
+    </div>
+
+</div>
+    <footer class="foot">
+        <div class="logo2">
+        <img class = 'govtg' src="/static/assets/govtg1.png" alt="Government of Gujarat Logo">
+        <h1>Government Of Gujarat</h1></div>
+        <hr>
+        <div class="socials">
+<p>Follow Us</p>
+<img src="/static/img/icons8-twitter-150.png" alt="x">
+<img src="/static/img/icons8-instagram-150.png" alt="insta">
+<img src="/static/img/icons8-facebook-150.png" alt="meta">
+<img src="/static/img/icons8-youtube-256.png" alt="yt">
+<img src="/static/img/icons8-email-100.png" alt="email">
+<img src="/static/img/icons8-discord-100.png" alt="ds">
+<div class="queries">
+<p>Privacy policy</p>
+<p>Accessibility Statement</p>
+<p>Copyright Information</p>
+<p>FQIA</p>
+<p>No FEAR act</p></div></div>
+<div class="copyright">
+    <!-- <img src="assets/copyright.png" alt="copyright"> -->
+    <p>TEAM: Edu-Empowerers :-)</p>
+</div>
+</footer>
+<script src="/static/script2.js"></script>
+</body>
+</html>

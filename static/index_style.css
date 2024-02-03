@@ -1,0 +1,119 @@
+.Dashboard {
+    margin: 1rem;
+    padding: 2rem 2rem;
+    text-align: center;
+    padding-top: 26%;
+    height: 50px;
+    margin-bottom: 8%;
+  }
+  .Dashboard a{
+    
+  }
+  .School {
+    display: inline-block; 
+    position: relative;
+    bottom: 175px;
+    border-radius: 5%;
+    width: 150px;
+    height: 150px;
+    margin-left: 15px;
+    margin-bottom: 70px;
+    border: 1px solid black;
+    background-color: #0B304D;
+    padding: 1rem 1rem;
+    vertical-align: middle;
+    color: white;
+    text-align: center;
+  }
+
+
+  .Government {
+    display: inline-block;
+    position: relative;
+    bottom: 175px;
+    border-radius: 5%;
+    width: 150px;
+    height: 150px;
+    margin-left: 15px;
+    margin-bottom: 70px;
+    border: 1px solid black;
+    background-color: #0B304D;
+    padding: 1rem 1rem;
+    vertical-align: middle;
+    color: white;
+  }
+
+ .Government img{
+   height: 100px;
+   margin-top: 20px;
+ }
+ 
+ .School img{
+  height: 100px;
+  width: 106px;
+  border-radius: 50%;
+  margin-top: 25px;
+ }
+
+ header{
+  height: 100px;
+}
+
+ header,footer {
+  background-color: #0D192E;
+  /* background-color: #062034; */
+  /* font-family: 'Raleway', sans-serif; */
+  font-family: "Open Sans", Arial, Sans-Serif;
+  color: white;
+  text-align: center;
+  padding: 10px;
+}
+
+ .socials, .socials p{
+  margin: 15px;
+  display: flex;
+  justify-content: wrap;
+  align-items: center;
+  color: white;
+  font-size: 13px;
+  font-weight: bolder;
+}
+
+.queries{
+  /* font-style: bold; */
+  display: flex;
+  margin-left: 40%;
+}
+.socials img{
+  height: 15px;
+  padding: 5px;
+}
+.pfp{
+  height: 30px;
+}
+
+ .logo2{
+  display: flex;
+  align-items: center;
+}
+footer{
+  /* display: flex;
+  align-items: center; */
+  font-size: 10px;
+  /* font-family: 'Raleway', sans-serif; */
+  font-family: "Open Sans", Arial, Sans-Serif;
+  font-style: bold;
+}
+footer .govtg{
+  height: 49px;
+  width: 35px;
+  /* border-radius: 10px; */
+  margin: 20px;
+}
+.govtg{
+  height: 98px;
+  width: 100px;
+  border-radius: 10px;
+  /* margin: 20px; */
+  /* background-color: #1b1b32; */
+}

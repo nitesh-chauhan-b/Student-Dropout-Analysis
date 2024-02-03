@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Government Of India</title>
+    <link rel="stylesheet" href="/static/school_index_style.css">
+</head>
+<!-- <style>
+    @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@1,100&display=swap');
+  </style> -->
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap');
+  </style>
+<body>
+    <header></header>
+    <nav>
+        <div class="logo">
+        <img class = 'govtg' src="/static/govtg1.png" alt="Government of Gujarat Logo">
+        <h1>Government Of India</h1>
+        </div>
+       
+    </nav>
+        
+    <!-- <div class="container" id="workpending"></div> -->
+    
+        <h2>Contact Enquiries</h2>
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Name</th>
+              <th>Age</th>
+              <th>Gender</th>
+              <th>Caste</th>
+              <th>Area</th>
+              <th>City</th>
+              <th>Income</th>
+              <th>Reason</th>
+              <th>Father Occupation</th>
+              <th>School Index</th>
+              <th>State</th>
+              <th>Student ID</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for enquiry in enquiries %}
+              <tr>
+                <td>{{ enquiry.name }}</td>
+                <td>{{ enquiry.age }}</td>
+                <td>{{ enquiry.gender }}</td>
+                <td>{{ enquiry.caste }}</td>
+                <td>{{ enquiry.area }}</td>
+                <td>{{ enquiry.city }}</td>
+                <td>{{ enquiry.income }}</td>
+                <td>{{ enquiry.reason }}</td>
+                <td>{{ enquiry.foccupation }}</td>
+                <td>{{ enquiry.schoolindex }}</td>
+                <td>{{ enquiry.mystate }}</td>
+                <td>{{ enquiry.studentid }}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+    
+
+   
+    <footer class="foot">
+        <div class="logo2">
+        <img class = 'govtg' src="/static/govtg1.png" alt="Government of Gujarat Logo">
+        <h1>Government Of India</h1></div>
+        <hr>
+        <div class="socials">
+<p>Follow Us</p>
+<img src="/static/assets/icons8-twitter-150.png" alt="x">
+<img src="/static/assets/icons8-instagram-150.png" alt="insta">
+<img src="/static/assets/icons8-facebook-150.png" alt="meta">
+<img src="/static/assets/icons8-youtube-256.png" alt="yt">
+<img src="/static/assets/icons8-email-100.png" alt="email">
+<img src="/static/assets/icons8-discord-100.png" alt="ds">
+<div class="queries">
+<p>Privacy policy</p>
+<p>Accessibility Statement</p>
+<p>Copyright Information</p>
+<p>FQIA</p>
+<p>No FEAR act</p></div></div>
+<div class="copyright">
+    <!-- <img src="assets/copyright.png" alt="copyright"> -->
+    <p>TEAM: Edu-Empowerers :-)</p>
+</div>
+</footer>
+<script src="/static/script.js"></script>
+</body>
+</html>
