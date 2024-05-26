@@ -6,5 +6,5 @@ Also there are much more functionalities  available to support the authentic sta
 
 There are still many features which are under development like model which predicts whether perticular student have a chances of dropout or not.
 
-To provide the solution to this problem we have developed a kind of instruction pipeline thorough which users with high power can give instructions or guildlines to solve the above problem according to the statistical analysis which we are providing through this website.
+To provide the solution to this problem we have developed a kind of instruction pipeline through which users with high power can give instructions or guildlines to solve the above problem according to the statistical analysis which we are providing through this website.
 
